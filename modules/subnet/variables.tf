@@ -11,3 +11,7 @@ variable "number_subnet" {
 variable "vpc_id" {
   description = "The ID of the vpc"
 }
+
+variable "cidr_block_vpc" {
+  description = "The cidr of the VPC"
+}
