@@ -14,3 +14,7 @@ variable "subnet_list" {
 variable "gateway_id" {
   
 }
+
+variable "nat_gateway_id" {
+  
+}

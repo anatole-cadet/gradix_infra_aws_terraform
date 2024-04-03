@@ -3,9 +3,9 @@
 */
 module "vpc_module" {
   source = "./modules/vpc"
-  vpc_tag_name = var.vpc_tag_name
   vpc_cidr_block = var.vpc_cidr_block
 }
+
 
 /**
 * Module to create subnet(s)
@@ -18,8 +18,16 @@ module "subnet_module" {
 }
 
 /**
-* Create route table for subnet. The number route table to create equal to the number
-* of subnet
+* Module to create internet gateway
+*/
+module "internet_gateway_module" {
+  source = "./modules/internet_gateway"
+  vpc_id = module.vpc_module.vpc_id
+}
+
+/**
+* Create route table for subnet. The number of route table to create is equal to the number
+* of subnet given in the .tfvars
 */
 module "route_table" {
   source = "./modules/route_table"
@@ -27,11 +35,12 @@ module "route_table" {
   vpc_id = module.vpc_module.vpc_id
   subnet_list = module.subnet_module.subnet_output
   gateway_id = module.internet_gateway_module.internet_gateway_output
+  nat_gateway_id = module.nat_gateway_module.nat_gateway_id_output
 }
 
 /**
-* Create the route table association for associate subnet to each route table
-* Then, the number of route table is equal to the number of subnet.
+* Create the route table association for associate a subnet to each route table
+* The number of route table is equal to the number of subnet given in the .tfvars.
 */
 module "route_table_association" {
   source = "./modules/route_table_association"
@@ -40,10 +49,30 @@ module "route_table_association" {
   route_table_id = module.route_table.route_table_output[count.index].id
 }
 
+
 /**
-* Module to create internet gateway
+* Create the NatGateWay. We choose the first subnet to attach to the NatGateWay,
+* This subnet is the public subnet.
 */
-module "internet_gateway_module" {
-  source = "./modules/internet_gateway"
+module "nat_gateway_module" {
+  source = "./modules/nat_gateway"
+  subnet_id = module.subnet_module.subnet_output[0].id
+}
+
+/**
+* Create the security groups
+*/
+module "security_group_module" {
+  source = "./modules/security_group"
   vpc_id = module.vpc_module.vpc_id
 }
+
+module "ec2_instance_module" {
+  source = "./modules/ec2_instance"
+  ami = var.ami
+  instance_type = var.instance_type
+  subnet_list = module.subnet_module.subnet_output
+  number_ec2_instance = var.number_ec2_instance
+  security_group_list = module.security_group_module.security_group_list_output
+}
+
