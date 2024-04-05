@@ -21,3 +21,7 @@ variable "ami" {
 variable "instance_type" {
   
 }
+
+# variable "depends_on_resource" {
+  
+# }

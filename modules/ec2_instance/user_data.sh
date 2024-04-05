@@ -1,6 +1,6 @@
 #!/bin/bash
+sudo su
 yum update -y
-yum install -y httpd.x86_64
-systemctl start httpd.service
-systemctl enable httpd.service
-echo “Hello World from $(hostname -f)” > /var/www/html/index.html
+yum install -y httpd
+echo "<h1> Welcome on the <font color='red'>GradixApp $(hostname -f)</font></h1>" > /var/www/html/index.html
+systemctl start httpd

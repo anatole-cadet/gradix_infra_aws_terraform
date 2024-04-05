@@ -36,6 +36,7 @@ module "route_table" {
   subnet_list = module.subnet_module.subnet_output
   gateway_id = module.internet_gateway_module.internet_gateway_output
   nat_gateway_id = module.nat_gateway_module.nat_gateway_id_output
+  depends_on = [ module.subnet_module ]
 }
 
 /**
@@ -46,7 +47,7 @@ module "route_table_association" {
   source = "./modules/route_table_association"
   count = var.number_subnet
   subnet_id = module.subnet_module.subnet_output[count.index].id
-  route_table_id = module.route_table.route_table_output[count.index].id
+  route_table_id =module.route_table.route_table_id_output[count.index] #module.route_table.route_table_output[count.index].id
 }
 
 
@@ -73,6 +74,19 @@ module "ec2_instance_module" {
   instance_type = var.instance_type
   subnet_list = module.subnet_module.subnet_output
   number_ec2_instance = var.number_ec2_instance
-  security_group_list = module.security_group_module.security_group_list_output
+  security_group_list = module.security_group_module.security_group_id_output  #module.security_group_module.security_group_list_output
 }
 
+
+
+/**
+* Create Application Load Balancer, target group and 
+*/
+module "application_load_balancer" {
+  source = "./modules/application_load_balancer"
+  vpc_id = module.vpc_module.vpc_id
+  list_security_group = module.security_group_module.security_group_id_output  #module.security_group_module.security_group_list_output
+  list_subnet = module.subnet_module.subnet_output
+  list_ec2_instance_to_register = module.ec2_instance_module.list_instance_to_register_output
+  depends_on = [ module.ec2_instance_module ]
+}

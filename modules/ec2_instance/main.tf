@@ -51,6 +51,6 @@ resource "aws_instance" "instance" {
     tags = {
         Name = "${terraform.workspace}-GradixInstance-${count.index}"
     }
-    vpc_security_group_ids      = count.index > 0 ? [var.security_group_list[1].id]: [var.security_group_list[0].id]
+    vpc_security_group_ids      = count.index > 0 ? [var.security_group_list[1]]: [var.security_group_list[0]]
     user_data = file("./modules/ec2_instance/user_data.sh")
 }
