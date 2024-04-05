@@ -78,18 +78,35 @@ variable "number_ec2_instance" {
 - <b>ami             :</b> The AMI (Amazon machin image)
 
 > [!NOTE]
-> As we decided that each subnet has his own table route; then the number of table route created is equal to the number of subnet given in the .tfvars. Then in the <b>main.tf</b> of the root, the module for creating the routes table was implemented as bellow :
+> As we decided that each subnet has his own table route; then we created two routes tables. Then in the <b>main.tf</b> of the root, the module for creating the routes table was implemented as bellow :
  ```terraform
  /**
  * Create the route table association for associate a subnet to each route table
  * The number of route table is equal to the number of subnet given in the .tfvars.
  */
- module "route_table_association" {
-   source = "./modules/route_table_association"
-   count = var.number_subnet
-   subnet_id = module.subnet_module.subnet_output[count.index].id
-   route_table_id = module.route_table.route_table_output[count.index].id
- }
+resource "aws_route_table" "route_table_private" {
+    vpc_id = var.vpc_id
+    route {
+        cidr_block = "0.0.0.0/0"
+        gateway_id = var.gateway_id
+    }
+    tags = {
+        Name = "${terraform.workspace}-GradixRouteTable-0"
+    }
+}
+
+
+resource "aws_route_table" "route_table_public" {
+    vpc_id = var.vpc_id
+    route {
+        cidr_block = var.subnet_list[1].cidr_block
+        nat_gateway_id = var.nat_gateway_id
+        
+    }
+    tags = {
+        Name = "${terraform.workspace}-GradixRouteTable-1"
+    }
+}
  ```
 
  > [!NOTE]
