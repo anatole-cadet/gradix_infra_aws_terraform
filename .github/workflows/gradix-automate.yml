@@ -1,8 +1,7 @@
 name: Gradix Automate
 on: 
     push:
-        branches: 
-            - stage
+        branches: [ "stage" ]
 jobs:
     Configure_AWS_credential:
         runs-on: ubuntu-latest
