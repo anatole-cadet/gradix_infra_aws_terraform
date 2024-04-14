@@ -21,7 +21,7 @@ The structure of the project contain a directory of modules. For each resource c
 ![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/60ab9b42-a02c-45a1-b19d-ff1f98c5036a)
 
 
-We created two workspace <b>dev</b> and <b>stage</b>, inside each one will have the state file. State file is the file thta terraform create when we deployed. This file conatain all the information about each resource that created. As it can contain sensitive informations, we choose to store the in S3 Bucket. And as we created workspace, a state file will create for each environement. Notice that each environment has it's own informations configuration in a .tfvars file. 
+We created two workspace <b>dev</b> and <b>stage</b>. As it can contain sensitive informations, we choose to store the state file for each workspace in S3 Bucket. Remember that this file conatain all the information about each resource that created. Notice that each workspace has it's own informations configuration in a .tfvars file. 
 In S3 bucket <b>gradix-terraform-state</b>, you will see two directory named dev/ and stage/.
 
 <b>backend.tf</b>
