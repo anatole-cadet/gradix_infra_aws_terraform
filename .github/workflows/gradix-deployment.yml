@@ -1,0 +1,33 @@
+name: Gradix-Deployment
+on: 
+    push:
+        branches: [ "stage", "production" ]
+permissions: 
+    id-token: write
+    contents: read
+jobs:
+    Configure_AWS_credential:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v1
+            - name: Configure AWS
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                role-to-assume: ${{secrets.AWS_GITHUB_ACTION_ROLE}}
+                aws-region: ca-central-1
+            - name: Configure Terraform
+              uses: hashicorp/setup-terraform@v3.0.0
+              with:
+                terraform_wrapper: false
+            - name: Create terraform workspace - stage
+              run: terraform workspace new stage | terraform workspace select stage
+            - name: Terraform Init
+              id: init
+              run: terraform init -var-file="stage.tfvars"
+            - name: Terraform validate
+              id: validate
+              run: terraform validate
+            - name: Terraform plan
+              id: plan
+              run: terraform plan -var-file="stage.tfvars"  
