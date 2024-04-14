@@ -22,10 +22,6 @@ The structure of the project contains a directory of modules. For each resource 
 
 
 
-
-![gradix_command_1](https://github.com/anatole-cadet/gradix_infra_aws_terraform/assets/13883209/e73d0e4c-4248-49be-a4ca-6c86715062fb)
-
-
 ### Environments and GitHub Action
 We created two environments (stage, prod) on github, that each is associated a branch ( in rulesets). 
 
