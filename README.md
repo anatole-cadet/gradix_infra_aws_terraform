@@ -16,13 +16,25 @@ Considering the architure's diagram below, The app will be deploy on three ec2 i
 > [!NOTE]
 > Before to show the project structur, we just want to remind that, according to the <a href="https://developer.hashicorp.com/terraform">Hashicorp website</a>, "Terraform is an infrastructure as code tool that lets you build, change, and version infrastructure safely and efficiently. So, as we mentionned, we used it to deploy the cloud infrastructure of gradix.
 
-The structure of the project contain a directory of modules. For each resource created there's a module.
+The structure of the project contains a directory of modules. For each resource created there's a module.
 
 ![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/60ab9b42-a02c-45a1-b19d-ff1f98c5036a)
 
 
-We created two workspace <b>dev</b> and <b>stage</b>. As it can contain sensitive informations, we choose to store the state file for each workspace in S3 Bucket. Remember that this file conatain all the information about each resource that created. Notice that each workspace has it's own informations configuration in a .tfvars file. 
-In S3 bucket <b>gradix-terraform-state</b>, you will see two directory named dev/ and stage/.
+
+
+![gradix_command_1](https://github.com/anatole-cadet/gradix_infra_aws_terraform/assets/13883209/e73d0e4c-4248-49be-a4ca-6c86715062fb)
+
+
+### Environments and GitHub Action
+We created two environments (stage, prod) on github, that each is associated a branch ( in rulesets). 
+
+### OpenID Connect (OIDC)
+The organisation managed multiple account of AWS. For that, for the stage environment the deployment is made to an AWS account satge; for the prod environment the deployment is made to another AWS account prod. To allow workflows access our resources in AWS, we configured an OIDC (instead of used access_key and secret_key) in each AWS account.
+- On push to stage branch : this triggered the worflow and if it's not fail the resources will deploy in the AWS account stage
+- On push to prod branch : this triggered the worflow and if it's not fail the resources will deploy in the AWS account prod. Notice that, it's requeire someone to approve the execution of the workflow for this environment.
+
+In each concerned AWS account there is a s3 bucket for the state file. 
 
 <b>backend.tf</b>
 ```terraform
@@ -37,12 +49,8 @@ terraform {
 }
 ```
 
-![gradix_command_1](https://github.com/anatole-cadet/gradix_infra_aws_terraform/assets/13883209/e73d0e4c-4248-49be-a4ca-6c86715062fb)
-
-
-
 ### Terraform configuration
-As mentionned above, we created two workspace : dev, stage. With the .tfvars, Terraform created all the resources include subnets, routes table, ec2 instances. It means that resources was created depending the informations given in the <b>.tfvars</b> files : .<br>
+Depending on the working branch, Terraform created all the resources include subnets, routes table, ec2 instances and others when usin the appropriate .tfvars. It means that resources was created depending the informations given in the <b>.tfvars</b> files : .<br>
 - <b>vpc_cidr_block :</b> The cidr of the VPC<br>
 - <b>number_subnet  :</b> The number of subnet that we want to create in the VPC. The variables.tf contain a validation data this number must be smaller than 7<br>
   
