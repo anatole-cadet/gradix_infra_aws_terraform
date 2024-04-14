@@ -19,13 +19,15 @@ resource "aws_lb" "application_load_balancer" {
 * Create the target group
 */
 resource "aws_lb_target_group" "alb_target_group" {
-  name = "${var.environment}-GradixTargetGroup"
   vpc_id = var.vpc_id
   port = 80
   protocol = "HTTP"
   target_type = "instance"
   health_check {
     enabled = true
+  }
+  tags = {
+    Name = "${var.environment}-GradixTargetGroup"
   }
   #depends_on = [ var.depends_on_resource ]
   
