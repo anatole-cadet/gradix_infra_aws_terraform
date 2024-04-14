@@ -8,7 +8,7 @@ In this project, we deployed cloud infrastructure of the gradixApp with Terrafor
 
 Considering the architure's diagram below, The app will be deploy on three ec2 instances; so for each instance we configured the apache web server and others. We must know also that the Gradix managed the database. That's the reason why we have another ec2 instance in private subnet.  
 
-![gradix_network](https://github.com/anatole-cadet/gradix_network_aws/assets/13883209/be8d487b-9d67-4d7d-98bf-59c1de80a34a)
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/efc39e7b-f3ea-46ec-aaa8-f9b7f2412c28)
 
 
 ### Project's structure
