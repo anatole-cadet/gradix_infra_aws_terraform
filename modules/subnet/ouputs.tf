@@ -5,7 +5,7 @@ output "number_subnet_created" {
 
 
 output "subnet_output" {
-  value = [ for subnet in aws_subnet.subnet : subnet]
+  value = [for subnet in aws_subnet.subnet : subnet]
 }
 
 

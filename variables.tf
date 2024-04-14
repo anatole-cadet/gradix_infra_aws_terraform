@@ -11,17 +11,17 @@ variable "number_subnet" {
 }
 
 variable "number_ec2_instance" {
-  
+
 }
 
 variable "ami" {
-  
+
 }
 
 variable "instance_type" {
-  
+
 }
 
 variable "environment" {
-  
+
 }
