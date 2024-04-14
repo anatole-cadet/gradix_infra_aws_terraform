@@ -30,4 +30,4 @@ jobs:
               run: terraform validate
             - name: Terraform plan
               id: plan
-              run: terraform plan -var="environment=${{github.ref_name}} " -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}"   
+              run: terraform plan -var="environment=${{github.ref_name}}" -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}"   
