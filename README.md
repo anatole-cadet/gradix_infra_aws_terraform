@@ -18,7 +18,7 @@ Considering the architure's diagram below, The app will be deploy on three ec2 i
 
 The structure of the project contain a directory of modules. For each resource created there's a module.
 
-![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/8ee1ec4e-b168-4378-a3fb-99341e903f4b)
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/60ab9b42-a02c-45a1-b19d-ff1f98c5036a)
 
 
 We created two workspace <b>dev</b> and <b>stage</b>, inside each one will have the state file. State file is the file thta terraform create when we deployed. This file conatain all the information about each resource that created. As it can contain sensitive informations, we choose to store the in S3 Bucket. And as we created workspace, a state file will create for each environement. Notice that each environment has it's own informations configuration in a .tfvars file. 
