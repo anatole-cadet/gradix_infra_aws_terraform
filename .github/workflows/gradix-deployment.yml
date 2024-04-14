@@ -8,6 +8,8 @@ permissions:
 jobs:
     Configure_AWS_credential:
         runs-on: ubuntu-latest
+        environment: 
+            name: ${{github.ref_name}}
         steps:
             - name: Checkout Repo
               uses: actions/checkout@v1
