@@ -8,16 +8,16 @@ variable "vpc_id" {
 
 
 variable "subnet_list" {
-  
+
 }
 
 variable "gateway_id" {
-  
+
 }
 
 variable "nat_gateway_id" {
-  
+
 }
 variable "environment" {
-  
+
 }
