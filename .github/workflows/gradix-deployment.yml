@@ -30,4 +30,4 @@ jobs:
               run: terraform validate
             - name: Terraform plan
               id: plan
-              run: terraform plan -var="vpc_cidr_block=${{secrets.VPC_CIDR_BLOCK}}" -var="region=${{secrets.REGION}}" -var="number_subnet="${{secrets.NUMBER_SUBNET}} -var="number_ec2_instance="${{secrets.NUMBER_EC2_INSTANCE}} -var="instance_type=${{secrets.INSTANCE_TYPE}}" -var="ami=${{secrets.AMI}}"   
+              run: terraform plan -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}"   
