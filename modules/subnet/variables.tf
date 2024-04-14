@@ -15,3 +15,7 @@ variable "vpc_id" {
 variable "cidr_block_vpc" {
   description = "The cidr of the VPC"
 }
+
+variable "environment" {
+  
+}

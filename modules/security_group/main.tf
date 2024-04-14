@@ -1,5 +1,5 @@
 resource "aws_security_group" "security_group_private" {
-    name = "${terraform.workspace}-GradixSG-0"
+    name = "${var.environment}-GradixSG-0"
     vpc_id = var.vpc_id
     ingress {
         from_port = 22
@@ -15,12 +15,12 @@ resource "aws_security_group" "security_group_private" {
         protocol = "-1"
     }
     tags = {
-        Name = "${terraform.workspace}-GradixSG-0"
+        Name = "${var.environment}-GradixSG-0"
     }
 }
 
 resource "aws_security_group" "security_group_public" {
-    name = "${terraform.workspace}-GradixSG-1"
+    name = "${var.environment}-GradixSG-1"
     vpc_id = var.vpc_id
     ingress {
         from_port = 22
@@ -42,6 +42,6 @@ resource "aws_security_group" "security_group_public" {
         protocol = "-1"
     }
     tags = {
-        Name = "${terraform.workspace}-GradixSG-1"
+        Name = "${var.environment}-GradixSG-1"
     }
 }

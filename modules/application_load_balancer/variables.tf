@@ -14,3 +14,7 @@ variable "list_ec2_instance_to_register" {
   
 }
 
+variable "environment" {
+  
+}
+

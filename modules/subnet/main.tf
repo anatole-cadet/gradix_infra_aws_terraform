@@ -10,6 +10,6 @@ resource "aws_subnet" "subnet" {
     availability_zone = data.aws_availability_zones.availability_zones_gradix.names[count.index]
     vpc_id = var.vpc_id
     tags = {
-        Name = "${terraform.workspace}-GradixSubnet-${count.index}"
+        Name = "${var.environment}-GradixSubnet-${count.index}"
     }
 }

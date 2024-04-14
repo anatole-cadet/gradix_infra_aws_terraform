@@ -22,6 +22,6 @@ variable "instance_type" {
   
 }
 
-# variable "depends_on_resource" {
+variable "environment" {
   
-# }
+}

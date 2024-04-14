@@ -3,14 +3,14 @@
 * We specified the list of the subnet; and the security group 1 that is for public subnet.
 */
 resource "aws_lb" "application_load_balancer" {
-  name = "${terraform.workspace}-GradixALB"
+  name = "${var.environment}-GradixALB"
   load_balancer_type = "application"
   enable_deletion_protection = false
   subnets = [ for sbn in var.list_subnet : sbn.id]
   security_groups = [var.list_security_group[1]] #[ for sg in var.list_security_group : sg.id][0]
   ip_address_type = "ipv4"
   tags = {
-    Name = "${terraform.workspace}-GradixALB"
+    Name = "${var.environment}-GradixALB"
   }
   
 }
@@ -19,7 +19,7 @@ resource "aws_lb" "application_load_balancer" {
 * Create the target group
 */
 resource "aws_lb_target_group" "alb_target_group" {
-  name = "${terraform.workspace}-GradixTargetGroup"
+  name = "${var.environment}-GradixTargetGroup"
   vpc_id = var.vpc_id
   port = 80
   protocol = "HTTP"

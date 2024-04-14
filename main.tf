@@ -15,6 +15,7 @@ module "subnet_module" {
   number_subnet = tonumber(var.number_subnet)
   vpc_id = module.vpc_module.vpc_id
   cidr_block_vpc = module.vpc_module.vpc_cidr_block_output
+  environment = var.environment
 }
 
 /**
@@ -23,6 +24,7 @@ module "subnet_module" {
 module "internet_gateway_module" {
   source = "./modules/internet_gateway"
   vpc_id = module.vpc_module.vpc_id
+  environment = var.environment
 }
 
 /**
@@ -37,6 +39,7 @@ module "route_table" {
   gateway_id = module.internet_gateway_module.internet_gateway_output
   nat_gateway_id = module.nat_gateway_module.nat_gateway_id_output
   depends_on = [ module.subnet_module ]
+  environment = var.environment
 }
 
 /**
@@ -58,6 +61,7 @@ module "route_table_association" {
 module "nat_gateway_module" {
   source = "./modules/nat_gateway"
   subnet_id = module.subnet_module.subnet_output[0].id
+  environment = var.environment
 }
 
 /**
@@ -66,6 +70,7 @@ module "nat_gateway_module" {
 module "security_group_module" {
   source = "./modules/security_group"
   vpc_id = module.vpc_module.vpc_id
+  environment = var.environment
 }
 
 module "ec2_instance_module" {
@@ -75,6 +80,7 @@ module "ec2_instance_module" {
   subnet_list = module.subnet_module.subnet_output
   number_ec2_instance = var.number_ec2_instance
   security_group_list = module.security_group_module.security_group_id_output  #module.security_group_module.security_group_list_output
+environment = var.environment
 }
 
 
@@ -89,4 +95,5 @@ module "application_load_balancer" {
   list_subnet = module.subnet_module.subnet_output
   list_ec2_instance_to_register = module.ec2_instance_module.list_instance_to_register_output
   depends_on = [ module.ec2_instance_module ]
+  environment = var.environment
 }

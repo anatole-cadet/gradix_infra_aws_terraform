@@ -24,3 +24,6 @@ variable "security_group_list" {
   
 }
 
+variable "environment" {
+  
+}

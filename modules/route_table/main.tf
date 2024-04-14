@@ -6,7 +6,7 @@ resource "aws_route_table" "route_table_private" {
         gateway_id = var.gateway_id
     }
     tags = {
-        Name = "${terraform.workspace}-GradixRouteTable-0"
+        Name = "${var.environment}-GradixRouteTable-0"
     }
 }
 
@@ -19,7 +19,7 @@ resource "aws_route_table" "route_table_public" {
         
     }
     tags = {
-        Name = "${terraform.workspace}-GradixRouteTable-1"
+        Name = "${var.environment}-GradixRouteTable-1"
     }
 }
 
