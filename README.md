@@ -4,9 +4,9 @@
 
 # Gradix
 
-In this project, we deployed cloud infrastructure of the gradixApp with Terraform. 
+In this project, we deployed cloud infrastructure of Gradix enterprise for one of it's project, with Terraform. 
 
-Considering the architure's diagram below, The app will be deploy on three ec2 instances; so for each instance we configured the apache web server and others. We must know also that the Gradix managed the database. That's the reason why we have another ec2 instance in private subnet.  
+Considering the architure's diagram below, The simple app will be deploy on three ec2 instances; so for each instance we configured the apache web server and others. We must know also that the Gradix managed a database for it's project. That's the reason why we have another ec2 instance in private subnet; but we will not configure database on it.  
 
 ![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/efc39e7b-f3ea-46ec-aaa8-f9b7f2412c28)
 
