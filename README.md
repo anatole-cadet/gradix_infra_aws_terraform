@@ -1,4 +1,4 @@
-[![Gradix-Deployment on stage](https://github.com/anatole-cadet/gx_infra_aws_terraform/actions/workflows/gradix-deployment.yml/badge.svg?branch=stage)](https://github.com/anatole-cadet/gx_infra_aws_terraform/actions/workflows/gradix-deployment.yml)
+[![Gradix-Deployment](https://github.com/anatole-cadet/gx_infra_aws_terraform/actions/workflows/gradix-deployment.yml/badge.svg?branch=stage)](https://github.com/anatole-cadet/gx_infra_aws_terraform/actions/workflows/gradix-deployment.yml)
 
 
 
@@ -114,9 +114,9 @@ resource "aws_route_table" "route_table_public" {
  ```
 
  > [!NOTE]
-> According to security group, terraform created two security group : one for all the publics instances and another one for the private instance on which the database is. 
+> According to security group, terraform created two security group : one for all the publics instances and another one for the private instance on which the database is.
 
 
-## The result when pushing on stage branch :
+## The result when pushing on stage :
 
-![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/548e0a64-f120-4968-956a-4bf373a0c37b)
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/acac1406-37d1-4d05-a86c-a119b44d516a)
