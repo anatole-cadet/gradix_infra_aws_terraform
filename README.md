@@ -1,4 +1,4 @@
-<img alt="Static Badge" src="https://img.shields.io/badge/status-development-blue">
+[![Gradix-Deployment on stage](https://github.com/anatole-cadet/gx_infra_aws_terraform/actions/workflows/gradix-deployment.yml/badge.svg?branch=stage)](https://github.com/anatole-cadet/gx_infra_aws_terraform/actions/workflows/gradix-deployment.yml)
 
 
 
