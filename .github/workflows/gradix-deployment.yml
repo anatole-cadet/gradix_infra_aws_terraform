@@ -1,3 +1,16 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #  # # # # # # # # # # #
+#
+#     This workflow will deploy the Gradix's resources on AWS in the region : ca-central-1
+#         - Configure AWS (by using in the environment secrets for the stage, the arn of OIDC)
+#         - Configure Terraform
+#         - Validates the configurations files
+#         - Create an execution plan
+#         - Execute the plan with terraform apply
+#         - Waiting time(10 minutes) for leting verify the resources in AWS
+#         - Destroy the resources
+#
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #  # # # # # # # # # # #
+
 name: Gradix-Deployment
 on: 
     push:
@@ -6,7 +19,7 @@ permissions:
     id-token: write
     contents: read
 jobs:
-    Configure_AWS_credential__Terraform__and_validate_Test:
+    Deployment_Gradix_stage:
         runs-on: ubuntu-latest
         environment: 
             name: ${{github.ref_name}}
@@ -17,20 +30,42 @@ jobs:
               uses: aws-actions/configure-aws-credentials@v4
               with:
                 role-to-assume: ${{secrets.AWS_GITHUB_ACTION_ROLE}}
-                aws-region: ca-central-1
+                aws-region: ${{vars.REGION}}
             - name: Configure Terraform
               uses: hashicorp/setup-terraform@v3.0.0
               with:
                 terraform_wrapper: false
+            - name: Create backend for statefile
+              run: |
+                cat > backend.tf << EOF 
+                terraform {
+                  backend "s3" {
+                    bucket         = "${{vars.BUCKET_STAGE_STATE_FILE}}"
+                    encrypt        = true
+                    region         = "${{vars.REGION}}"
+                    key            = "terraform.tfstate"
+                    dynamodb_table = "gradix-dynamodb-state-locking"
+                  }
+                }
+                EOF
             - name: Terraform Init
               id: init
               run: terraform init -var="environment=${{github.ref_name}}" -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}" 
             - name: Terraform Format
               id: format
-              run: terraform fmt -recusirve
+              uses: dflook/terraform-fmt@v1
             - name: Terraform validate
               id: validate
               run: terraform validate
             - name: Terraform plan
               id: plan
-              run: terraform plan -var="environment=${{github.ref_name}}" -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}"   
+              run: terraform plan -var="environment=${{github.ref_name}}" -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}" 
+            - name: Terraform apply
+              id: apply
+              run: terraform apply -auto-approve -var="environment=${{github.ref_name}}" -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}" 
+            - name: Wainting before to destroy 
+              run: sleep 600s
+              shell: bash
+            - name: Destroy gradix resources
+              run: terraform destroy -auto-approve -var="environment=${{github.ref_name}}" -var="vpc_cidr_block=${{vars.VPC_CIDR_BLOCK}}" -var="region=${{ vars.REGION }}" -var="number_subnet=${{vars.NUMBER_SUBNET}}" -var="number_ec2_instance=${{vars.NUMBER_EC2_INSTANCE}}" -var="instance_type=${{vars.INSTANCE_TYPE}}" -var="ami=${{vars.AMI}}" 
+ 
