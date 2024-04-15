@@ -41,7 +41,7 @@ jobs:
             - name: Terraform Format
               id: format
               uses: dflook/terraform-fmt@v1
-            - name: Terraform validate
+            - name: Terraform validatee
               id: validate
               run: terraform validate
             - name: Terraform plan
