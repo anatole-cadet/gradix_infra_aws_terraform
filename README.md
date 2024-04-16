@@ -23,12 +23,34 @@ The structure of the project contains a directory of modules. For each resource 
 
 
 ### Environments and GitHub Action
-We created two environments (stage, prod) on github, that each is associated a branch ( in rulesets). 
+We created two environments (stage, production) on github, that each is associated to a branch :
+- environement stage is associate to the branch stage
+- Environement production is associate to the branch production
+
+For each environement, we added an environment secrets. One for the stage environement of the AWS account of stage, another one for the production environement of the AWS account of production
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/592377c5-c218-455a-8809-07f30d164c2f)
+> [!NOTE]
+> For the production environement, it's requeire reviewer before to deploy.
+> ![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/d3c7bfa5-d360-44c2-8e00-a804f498d617)
+
+For each environement, we created some variables. They're used in the workflow. The difference is to the instance type; in production we will launc ec2 instance of type t3.micro. For stage it is t2.micro.
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/7d568036-ecb4-4d86-abae-4e75ea821e67)
+
+----------------------------
+
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/2963b5c3-485a-4354-bf46-9e242ef66fff)
+
+
+<br>
+
+
 
 ### OpenID Connect (OIDC)
 The organisation managed multiple account of AWS. For that, for the stage environment the deployment is made to an AWS account satge; for the prod environment the deployment is made to another AWS account prod. To allow workflows access our resources in AWS, we configured an OIDC (instead of used access_key and secret_key) in each AWS account.
 - On push to stage branch : this triggered the worflow and if it's not fail the resources will deploy in the AWS account stage
-- On push to prod branch : this triggered the worflow and if it's not fail the resources will deploy in the AWS account prod. Notice that, it's requeire someone to approve the execution of the workflow for this environment.
+- On push to prod branch : this triggered the worflow and if it's not fail the resources will deploy in the AWS account production. We remind you that, it's requeire someone to approve the execution of the workflow for this environment.
+
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/5e2c818f-db6a-46e9-938d-0008beb662d8)
 
 In each concerned AWS account there is a s3 bucket for the state file. 
 
@@ -82,6 +104,11 @@ variable "number_ec2_instance" {
 - <b>ami             :</b> The AMI (Amazon machin image)
 
 > [!NOTE]
+> The .tfvars file for each branch, was used localy.
+![image](https://github.com/anatole-cadet/gx_infra_aws_terraform/assets/13883209/d9d01cb7-5feb-46f7-97bd-1ac38d3473ac)
+
+
+> [!NOTE]
 > As we decided that each subnet has his own table route; then we created two routes tables. Then in the <b>main.tf</b> of the root, the module for creating the routes table was implemented as bellow :
  ```terraform
  /**
@@ -114,7 +141,7 @@ resource "aws_route_table" "route_table_public" {
  ```
 
  > [!NOTE]
-> According to security group, terraform created two security group : one for all the publics instances and another one for the private instance on which the database is.
+> According to security group, terraform created two security group : one for all the publics instances and another one for the private instance on which the database is. 
 
 
 ## The result when pushing on stage :
